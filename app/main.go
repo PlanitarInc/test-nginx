@@ -116,7 +116,7 @@ func (ctx *viewCtx) authenticated(rw web.ResponseWriter, req *web.Request, next 
 	 */
 	var s sql.NullString
 	if err := db.QueryRow(`SELECT pg_sleep(0.1)`).Scan(&s); err != nil {
-		ctx.replier.SetError(err, http.StatusInternalServerError)
+		ctx.replier.SetError(err.Error(), http.StatusInternalServerError)
 		return
 	}
 
@@ -136,7 +136,7 @@ func (ctx *viewCtx) get(rw web.ResponseWriter, req *web.Request) {
 	key, _ := req.PathParams["key"]
 
 	if err := getS3Object(key, rw); err != nil {
-		ctx.replier.SetError(err, http.StatusInternalServerError)
+		ctx.replier.SetError(err.Error(), http.StatusInternalServerError)
 		return
 	}
 
@@ -153,10 +153,10 @@ func getS3Object(key string, rw web.ResponseWriter) error {
 		return err
 	}
 
-	s3 := s3gof3r.New(get.EndPoint, k)
-	b := s3.Bucket(get.Bucket)
+	s3 := s3gof3r.New("", k)
+	b := s3.Bucket(os.Getenv("AWS_S3_BUCKET"))
 
-	s3gof3r.SetLogger(os.Stderr, "", log.LstdFlags, get.Debug)
+	s3gof3r.SetLogger(os.Stderr, "", log.LstdFlags, true)
 
 	r, header, err := b.GetReader(key, conf)
 	if err != nil {
