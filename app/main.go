@@ -195,7 +195,8 @@ func main() {
 	viewRouter.Get(":key", (*viewCtx).get)
 
 	/* Connect to DB */
-	db, err := sql.Open("postgres", "dbname=iguidedb host=localhost user=view_api")
+	var err error
+	db, err = sql.Open("postgres", "dbname=iguidedb host=localhost user=view_api")
 	if err != nil {
 		panic(err)
 	}
