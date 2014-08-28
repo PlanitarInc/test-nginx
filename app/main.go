@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 
@@ -12,7 +11,8 @@ import (
 	"github.com/PlanitarInc/sessions"
 	"github.com/PlanitarInc/web"
 	_ "github.com/lib/pq"
-	"github.com/rlmcpherson/s3gof3r"
+	"launchpad.net/goamz/aws"
+	"launchpad.net/goamz/s3"
 )
 
 var (
@@ -22,6 +22,13 @@ var (
 	store     = sessions.NewCookieStore(hashKey, blockKey)
 
 	db *sql.DB
+
+	awsAuth = aws.Auth{
+		AccessKey: os.Getenv("AWS_ACCESS_KEY_ID"),
+		SecretKey: os.Getenv("AWS_SECRET_ACCESS_KEY"),
+	}
+	awsRegion  = aws.USEast
+	bucketName = os.Getenv("AWS_S3_BUCKET")
 )
 
 type baseCtx struct{}
@@ -143,10 +150,10 @@ func (ctx *viewCtx) authorized(rw web.ResponseWriter, req *web.Request, next web
 func (ctx *viewCtx) get(rw web.ResponseWriter, req *web.Request) {
 	key, _ := req.PathParams["key"]
 
-	fmt.Printf("trying to get '%s'... ", key)
+	fmt.Printf("trying to get '%s.%s/%s'... ", bucketName, awsRegion.S3BucketEndpoint, key)
 
 	if err := getS3Object(key, rw); err != nil {
-		fmt.Println("FAILED:", err)
+		fmt.Println("get FAILED:", err)
 		ctx.replier.SetError(err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -156,31 +163,16 @@ func (ctx *viewCtx) get(rw web.ResponseWriter, req *web.Request) {
 }
 
 func getS3Object(key string, rw web.ResponseWriter) error {
-	conf := new(s3gof3r.Config)
-	*conf = *s3gof3r.DefaultConfig
-	conf.Md5Check = false
+	connection := s3.New(awsAuth, awsRegion)
+	mybucket := connection.Bucket(bucketName)
 
-	k, err := s3gof3r.EnvKeys()
+	rc, err := mybucket.GetReader(key)
 	if err != nil {
-		return err
+		return fmt.Errorf("getS3Object(): %s", err.Error())
 	}
 
-	s3 := s3gof3r.New("", k)
-	b := s3.Bucket(os.Getenv("AWS_S3_BUCKET"))
-
-	s3gof3r.SetLogger(os.Stderr, "", log.LstdFlags, true)
-
-	r, header, err := b.GetReader(key, conf)
-	if err != nil {
-		return err
-	}
-	log.Println("Headers: ", header)
-	if _, err = io.Copy(rw, r); err != nil {
-		return err
-	}
-	if err = r.Close(); err != nil {
-		return err
-	}
+	defer rc.Close()
+	io.Copy(rw, rc)
 	return nil
 }
 
@@ -212,6 +204,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	/* XXX Have to fix it in order to get rid of redirect issue */
+	awsRegion.S3BucketEndpoint = "http://${bucket}.s3.amazonaws.com"
 
 	http.ListenAndServe(":9000", router)
 }
