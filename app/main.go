@@ -131,7 +131,7 @@ func (ctx *viewCtx) authorized(rw web.ResponseWriter, req *web.Request, next web
 	fmt.Printf("checking permissions... ")
 
 	if _, ok := req.PathParams["key"]; !ok {
-		fmt.Println("FAILED:", err)
+		fmt.Println("FAILED:", "key is not specified")
 		ctx.replier.SetError("could not find key", http.StatusInternalServerError)
 		return
 	}
