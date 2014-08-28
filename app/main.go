@@ -190,7 +190,7 @@ func main() {
 
 	router.Middleware(web.StaticMiddleware("static"))
 
-	apiRouter := router.Subrouter(apiCtx{}, "/api/v1")
+	apiRouter := router.Subrouter(apiCtx{}, "/")
 	/* This is a little bit unexpected, but the order of middleware invocation
 	 * is the opposite of the order of middleware definition. Hence
 	 * Session middleware should come before the Json Writer middleware,
@@ -204,7 +204,7 @@ func main() {
 	viewRouter.Middleware((*viewCtx).loadSession)
 	viewRouter.Middleware((*viewCtx).authenticated)
 	viewRouter.Middleware((*viewCtx).authorized)
-	viewRouter.Get(":key", (*viewCtx).get)
+	viewRouter.Get("/:key", (*viewCtx).get)
 
 	/* Connect to DB */
 	var err error
