@@ -10,7 +10,6 @@ import (
 
 	"github.com/PlanitarInc/context"
 	"github.com/PlanitarInc/sessions"
-	"github.com/PlanitarInc/walk-inside-api/util/jsonutil"
 	"github.com/PlanitarInc/web"
 	"github.com/rlmcpherson/s3gof3r"
 )
@@ -28,7 +27,7 @@ type baseCtx struct{}
 
 type apiCtx struct {
 	*baseCtx
-	replier  jsonutil.JsonWriter
+	replier  JsonWriter
 	sessions map[string]*sessions.Session
 }
 
@@ -50,7 +49,7 @@ func (ctx *apiCtx) setSessions(rw web.ResponseWriter, req *web.Request, next web
 }
 
 func (ctx *apiCtx) setJsonWriter(rw web.ResponseWriter, req *web.Request, next web.NextMiddlewareFunc) {
-	ctx.replier = jsonutil.New(rw)
+	ctx.replier = New(rw)
 
 	next(rw, req)
 
