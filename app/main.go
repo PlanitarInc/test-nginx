@@ -112,35 +112,46 @@ func (ctx *viewCtx) loadSession(rw web.ResponseWriter, req *web.Request, next we
 }
 
 func (ctx *viewCtx) authenticated(rw web.ResponseWriter, req *web.Request, next web.NextMiddlewareFunc) {
+	fmt.Printf("authenticating... ")
 	/* XXX send some query, wait for the response, we don't really care what
 	 * the reponse is.
 	 */
 	var s sql.NullString
 	if err := db.QueryRow(`SELECT pg_sleep(0.1)`).Scan(&s); err != nil {
+		fmt.Println("FAILED:", err)
 		ctx.replier.SetError(err.Error(), http.StatusInternalServerError)
 		return
 	}
 
+	fmt.Println("OK")
 	next(rw, req)
 }
 
 func (ctx *viewCtx) authorized(rw web.ResponseWriter, req *web.Request, next web.NextMiddlewareFunc) {
+	fmt.Printf("checking permissions... ")
+
 	if _, ok := req.PathParams["key"]; !ok {
+		fmt.Println("FAILED:", err)
 		ctx.replier.SetError("could not find key", http.StatusInternalServerError)
 		return
 	}
 
+	fmt.Println("OK")
 	next(rw, req)
 }
 
 func (ctx *viewCtx) get(rw web.ResponseWriter, req *web.Request) {
 	key, _ := req.PathParams["key"]
 
+	fmt.Printf("trying to get '%s'... ", key)
+
 	if err := getS3Object(key, rw); err != nil {
+		fmt.Println("FAILED:", err)
 		ctx.replier.SetError(err.Error(), http.StatusInternalServerError)
 		return
 	}
 
+	fmt.Println("OK")
 	ctx.replier.SetObj(nil, 200)
 }
 
