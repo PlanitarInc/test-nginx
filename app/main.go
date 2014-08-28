@@ -11,6 +11,7 @@ import (
 	"github.com/PlanitarInc/context"
 	"github.com/PlanitarInc/sessions"
 	"github.com/PlanitarInc/web"
+	_ "github.com/lib/pq"
 	"github.com/rlmcpherson/s3gof3r"
 )
 
