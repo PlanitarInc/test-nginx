@@ -495,3 +495,418 @@ Percentage of the requests served within a certain time (ms)
   99%    165
  100%   1994 (longest request)
 ```
+
+## Benchmark results for small.txt (t2.small instance)
+
+#### Nginx statix
+
+```shell
+$ ab -c 1 -n 1000 http://localhost:8080/static/small.txt
+This is ApacheBench, Version 2.3 <$Revision: 1528965 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        nginx/1.4.6
+Server Hostname:        localhost
+Server Port:            8080
+
+Document Path:          /static/small.txt
+Document Length:        13 bytes
+
+Concurrency Level:      1
+Time taken for tests:   0.516 seconds
+Complete requests:      1000
+Failed requests:        0
+Total transferred:      252000 bytes
+HTML transferred:       13000 bytes
+Requests per second:    1936.15 [#/sec] (mean)
+Time per request:       0.516 [ms] (mean)
+Time per request:       0.516 [ms] (mean, across all concurrent requests)
+Transfer rate:          476.48 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.0      0       1
+Processing:     0    0   0.1      0       1
+Waiting:        0    0   0.1      0       1
+Total:          0    0   0.1      0       1
+
+Percentage of the requests served within a certain time (ms)
+  50%      0
+  66%      0
+  75%      1
+  80%      1
+  90%      1
+  95%      1
+  98%      1
+  99%      1
+ 100%      1 (longest request)
+```
+
+#### Nginx S3
+
+```shell
+$ ab -c 1 -n 1000 http://localhost:8080/s3/small.txt
+This is ApacheBench, Version 2.3 <$Revision: 1528965 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        nginx/1.4.6
+Server Hostname:        localhost
+Server Port:            8080
+
+Document Path:          /s3/small.txt
+Document Length:        13 bytes
+
+Concurrency Level:      1
+Time taken for tests:   133.306 seconds
+Complete requests:      1000
+Failed requests:        0
+Total transferred:      274000 bytes
+HTML transferred:       13000 bytes
+Requests per second:    7.50 [#/sec] (mean)
+Time per request:       133.306 [ms] (mean)
+Time per request:       133.306 [ms] (mean, across all concurrent requests)
+Transfer rate:          2.01 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.0      0       0
+Processing:   122  133  30.0    130     749
+Waiting:      122  133  30.0    130     749
+Total:        122  133  30.0    130     749
+
+Percentage of the requests served within a certain time (ms)
+  50%    130
+  66%    135
+  75%    137
+  80%    138
+  90%    144
+  95%    145
+  98%    154
+  99%    185
+ 100%    749 (longest request)
+```
+
+#### Nginx app static
+
+```shell
+$ ab -c 1 -n 1000 http://localhost:8080/app/small.txt
+This is ApacheBench, Version 2.3 <$Revision: 1528965 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        nginx/1.4.6
+Server Hostname:        localhost
+Server Port:            8080
+
+Document Path:          /app/small.txt
+Document Length:        13 bytes
+
+Concurrency Level:      1
+Time taken for tests:   1.043 seconds
+Complete requests:      1000
+Failed requests:        0
+Total transferred:      247000 bytes
+HTML transferred:       13000 bytes
+Requests per second:    959.09 [#/sec] (mean)
+Time per request:       1.043 [ms] (mean)
+Time per request:       1.043 [ms] (mean, across all concurrent requests)
+Transfer rate:          231.34 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.0      0       0
+Processing:     1    1   0.2      1       4
+Waiting:        1    1   0.2      1       3
+Total:          1    1   0.2      1       4
+
+Percentage of the requests served within a certain time (ms)
+  50%      1
+  66%      1
+  75%      1
+  80%      1
+  90%      1
+  95%      1
+  98%      1
+  99%      1
+ 100%      4 (longest request)
+```
+
+#### Nginx app S3
+
+```shell
+$ ab -c 1 -n 1000 http://localhost:8080/app/view/small.txt
+This is ApacheBench, Version 2.3 <$Revision: 1528965 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        nginx/1.4.6
+Server Hostname:        localhost
+Server Port:            8080
+
+Document Path:          /app/view/small.txt
+Document Length:        13 bytes
+
+Concurrency Level:      1
+Time taken for tests:   244.868 seconds
+Complete requests:      1000
+Failed requests:        0
+Total transferred:      179000 bytes
+HTML transferred:       13000 bytes
+Requests per second:    4.08 [#/sec] (mean)
+Time per request:       244.868 [ms] (mean)
+Time per request:       244.868 [ms] (mean, across all concurrent requests)
+Transfer rate:          0.71 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.0      0       0
+Processing:   227  245  53.5    240    1357
+Waiting:      227  245  53.5    239    1357
+Total:        227  245  53.5    240    1358
+
+Percentage of the requests served within a certain time (ms)
+  50%    240
+  66%    243
+  75%    249
+  80%    250
+  90%    255
+  95%    264
+  98%    297
+  99%    352
+ 100%   1358 (longest request)
+```
+
+#### App static
+
+```shell
+$ ab -c 1 -n 1000 http://localhost:9090/small.txt
+This is ApacheBench, Version 2.3 <$Revision: 1528965 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:
+Server Hostname:        localhost
+Server Port:            9090
+
+Document Path:          /small.txt
+Document Length:        13 bytes
+
+Concurrency Level:      1
+Time taken for tests:   0.488 seconds
+Complete requests:      1000
+Failed requests:        0
+Total transferred:      198000 bytes
+HTML transferred:       13000 bytes
+Requests per second:    2047.24 [#/sec] (mean)
+Time per request:       0.488 [ms] (mean)
+Time per request:       0.488 [ms] (mean, across all concurrent requests)
+Transfer rate:          395.85 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.0      0       0
+Processing:     0    0   0.3      0       3
+Waiting:        0    0   0.3      0       3
+Total:          0    0   0.3      0       3
+
+Percentage of the requests served within a certain time (ms)
+  50%      0
+  66%      0
+  75%      0
+  80%      0
+  90%      1
+  95%      1
+  98%      1
+  99%      2
+ 100%      3 (longest request)
+```
+
+#### App S3
+
+```shell
+$ ab -c 1 -n 1000 http://localhost:9090/view/small.txt
+This is ApacheBench, Version 2.3 <$Revision: 1528965 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:
+Server Hostname:        localhost
+Server Port:            9090
+
+Document Path:          /view/small.txt
+Document Length:        13 bytes
+
+Concurrency Level:      1
+Time taken for tests:   241.796 seconds
+Complete requests:      1000
+Failed requests:        0
+Total transferred:      130000 bytes
+HTML transferred:       13000 bytes
+Requests per second:    4.14 [#/sec] (mean)
+Time per request:       241.796 [ms] (mean)
+Time per request:       241.796 [ms] (mean, across all concurrent requests)
+Transfer rate:          0.53 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.0      0       0
+Processing:   227  242  55.4    237    1301
+Waiting:      227  242  55.4    237    1301
+Total:        227  242  55.4    237    1301
+
+Percentage of the requests served within a certain time (ms)
+  50%    237
+  66%    241
+  75%    243
+  80%    246
+  90%    251
+  95%    256
+  98%    263
+  99%    343
+ 100%   1301 (longest request)
+```
+
+#### S3
+
+```shell
+$ ab -c 1 -n 1000 http://iguide.plntr.s3.amazonaws.com/small.txt
+This is ApacheBench, Version 2.3 <$Revision: 1528965 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking iguide.plntr.s3.amazonaws.com (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        AmazonS3
+Server Hostname:        iguide.plntr.s3.amazonaws.com
+Server Port:            80
+
+Document Path:          /small.txt
+Document Length:        13 bytes
+
+Concurrency Level:      1
+Time taken for tests:   130.023 seconds
+Complete requests:      1000
+Failed requests:        0
+Total transferred:      393000 bytes
+HTML transferred:       13000 bytes
+Requests per second:    7.69 [#/sec] (mean)
+Time per request:       130.023 [ms] (mean)
+Time per request:       130.023 [ms] (mean, across all concurrent requests)
+Transfer rate:          2.95 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:       59   62   4.0     59      79
+Processing:    63   68  25.3     64     675
+Waiting:       63   68  25.3     64     675
+Total:        122  130  26.3    123     752
+
+Percentage of the requests served within a certain time (ms)
+  50%    123
+  66%    132
+  75%    134
+  80%    134
+  90%    140
+  95%    144
+  98%    153
+  99%    160
+ 100%    752 (longest request)
+```
