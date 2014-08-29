@@ -1,8 +1,6 @@
 .PHONY: build push clean test
 
 export AWS_S3_BUCKET="iguide.plntr"
-export AWS_ACCESS_KEY_ID="AKIAIYALDWSHG26NBB3A"
-export AWS_SECRET_ACCESS_KEY="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"
 
 ifneq (${NOCACHE},)
   NOCACHEFLAG=--no-cache
