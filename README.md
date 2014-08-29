@@ -1,6 +1,12 @@
 To run:
 
 ```shell
+# Edit deploy.sh: instance type and ami, then run the tests
+AWS_S3_BUCKET="iguide.plntr" ./aws/deploy.sh
+```
+
+Or do it manually:
+```shell
 AWS_S3_BUCKET="iguide.plntr"
 docker run -d --name ng -p 8080:80 -p 9000:9000 \
   -e "AWS_S3_BUCKET=$AWS_S3_BUCKET" \
