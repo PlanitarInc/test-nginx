@@ -1,0 +1,76 @@
+# vim: ft=nginx :
+
+##
+# You should look at the following URL's in order to grasp a solid understanding
+# of Nginx configuration files in order to fully unleash the power of Nginx.
+# http://wiki.nginx.org/Pitfalls
+# http://wiki.nginx.org/QuickStart
+# http://wiki.nginx.org/Configuration
+#
+# Generally, you will want to move this file somewhere, and start with a clean
+# file but keep this around for reference. Or just disable in sites-enabled.
+#
+# Please see /usr/share/doc/nginx-doc/examples/ for more detailed examples.
+##
+
+server {
+  listen 80 default_server;
+  listen [::]:80 default_server ipv6only=on;
+
+  error_log /var/log/nginx/debug.log debug;
+
+  root /usr/share/nginx/html;
+  index index.html index.htm;
+
+  server_name "";
+
+  location /static/ {
+	root /src/html;
+	autoindex on;
+	# First attempt to serve request as file, then
+	# as directory, then fall back to displaying a 404.
+	try_files $uri $uri/ =404;
+  }
+
+  location ~* ^/app/(.*) {
+	set $url_full         '$1';
+
+	log_by_lua '
+	  local v = ngx.var
+	  ngx.log(ngx.ERR, "app: url = ", v.url_full);
+	';
+
+	proxy_http_version     1.1;
+	proxy_set_header       Host localhost:9000;
+	proxy_buffering        off;
+#      proxy_intercept_errors on;
+	proxy_pass             http://127.0.0.1:9000/$url_full;
+  }
+
+  location ~* ^/s3/(.*) {
+	set $bucket           'iguide.plntr';
+	set $s3_bucket        '${bucket}.s3.amazonaws.com';
+	set $url_full         '$1';
+
+	log_by_lua '
+	  local v = ngx.var
+	  ngx.log(ngx.ERR, "s3: buket = ", v.bucket, "; s3_bucket =", v.s3_bucket, "; url = ", v.url_full);
+	';
+
+	proxy_http_version     1.1;
+	proxy_set_header       Host $s3_bucket;
+	proxy_set_header       Authorization '';
+	proxy_hide_header      x-amz-id-2;
+	proxy_hide_header      x-amz-request-id;
+	proxy_hide_header      Set-Cookie;
+	proxy_ignore_headers   "Set-Cookie";
+	proxy_buffering        off;
+	proxy_intercept_errors on;
+
+	resolver               8.8.8.8 valid=300s;
+#      resolver               172.16.0.23 valid=300s;
+	resolver_timeout       10s;
+
+	proxy_pass             http://$s3_bucket/$url_full;
+  }
+}
