@@ -35,10 +35,10 @@ echo ''
 echo "## Benchmark results for $FILE"
 echo ''
 
-report 'Nginx statix' http://localhost:${NGINX_PORT}/static/${FILE}
-report 'Nginx S3' http://localhost:${NGINX_PORT}/s3/${FILE}
-report 'Nginx app static' http://localhost:${NGINX_PORT}/app/${FILE}
-report 'Nginx app S3' http://localhost:${NGINX_PORT}/app/view/${FILE}
+report 'Nginx static' http://localhost:${NGINX_PORT}/static/${FILE}
 report 'App static' http://localhost:${APP_PORT}/${FILE}
-report 'App S3' http://localhost:${APP_PORT}/view/${FILE}
 report 'S3' http://${AWS_S3_BUCKET}.s3.amazonaws.com/${FILE}
+report 'Nginx app static' http://localhost:${NGINX_PORT}/app/${FILE}
+report 'Nginx S3' http://localhost:${NGINX_PORT}/s3/${FILE}
+report 'App S3' http://localhost:${APP_PORT}/view/${FILE}
+report 'Nginx app S3' http://localhost:${NGINX_PORT}/app/view/${FILE}
