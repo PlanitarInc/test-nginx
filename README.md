@@ -43,9 +43,8 @@ Hello World!
 ```
 Note: no special kernel tuning for better network performance was done.
 
-|              | t1.micro    | t2.small    |
-|              | Latency, ms | Latency, ms |
-| ----------   | ----------: | ----------: |
+|  Results            | `t1.micro` Latency, ms | `t2.small` Latency, ms |
+|--------------|------------:|------------:|
 | Apache       | 1.160       | 1.160       |
 | Nginx        | 1.476       | 0.516       |
 | App          | 1.361       | 0.488       |
