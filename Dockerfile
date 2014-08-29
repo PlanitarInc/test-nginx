@@ -26,6 +26,11 @@ ADD bin/app /src/app
 RUN apt-get install -y python-setuptools && easy_install pip
 RUN pip install s3cmd python-dateutil
 
+# Add tools for bechmarking: ab and wrk
+RUN apt-get install -y apache2-utils && apt-get clean
+ADD bin/wrk /src/wrk
+ADD test.sh /src/test.sh
+
 EXPOSE 80
 
 ADD run.sh /src/run.sh

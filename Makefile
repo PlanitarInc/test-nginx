@@ -6,7 +6,7 @@ ifneq (${NOCACHE},)
   NOCACHEFLAG=--no-cache
 endif
 
-build: bin/app static/big.txt
+build: bin/app static/big.txt bin/wrk
 	docker build ${NOCACHEFLAG} -t planitar/test-nginx .
 
 push:
@@ -50,6 +50,14 @@ bin/app:
 	  sudo apt-get install -y bzr && \
 	  go get "github.com/PlanitarInc/test-nginx/app" && \
 	  cp $$GOPATH/bin/app /out \
+	'
+
+bin/wrk:
+	mkdir -p bin
+	docker run --rm -v `pwd`/bin:/out planitar/dev-go /bin/bash -lc ' \
+	  sudo apt-get update && sudo apt-get install -y libssl-dev && \
+	  git clone https://github.com/wg/wrk && make -C wrk && \
+	  cp ./wrk/wrk /out \
 	'
 
 static/big.txt: 
